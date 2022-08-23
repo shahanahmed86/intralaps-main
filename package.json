@@ -1,5 +1,5 @@
 {
-	"name": "ts-node-js",
+	"name": "intralaps-main",
 	"version": "0.0.1",
 	"description": "Boiler plate for nodejs application with graphql & express using typescript",
 	"main": "index.js",
@@ -42,7 +42,7 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/shahanahmed86/ts-node-js.git"
+		"url": "git+https://github.com/shahanahmed86/intralaps-main.git"
 	},
 	"keywords": [
 		"typescript",
@@ -54,9 +54,9 @@
 	"author": "Shahan Ahmed",
 	"license": "MIT",
 	"bugs": {
-		"url": "https://github.com/shahanahmed86/ts-node-js.git/issues"
+		"url": "https://github.com/shahanahmed86/intralaps-main.git/issues"
 	},
-	"homepage": "https://github.com/shahanahmed86/ts-node-js.git#readme",
+	"homepage": "https://github.com/shahanahmed86/intralaps-main.git#readme",
 	"devDependencies": {
 		"@types/bcryptjs": "^2.4.2",
 		"@types/chai": "^4.3.1",

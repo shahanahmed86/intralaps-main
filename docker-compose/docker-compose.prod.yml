@@ -21,13 +21,13 @@ services:
       - server
     networks:
       - app
-    image: 127.0.0.1:5000/ts-app-web
+    image: 127.0.0.1:5000/intralaps-web
     ports:
       - 80:80
     
 
   server:
-    image: 127.0.0.1:5000/ts-app-server
+    image: 127.0.0.1:5000/intralaps-server
     command: npm run start
     deploy:
       replicas: 3
@@ -40,13 +40,13 @@ services:
         parallelism: 0
         order: stop-first
       restart_policy:
-        condition: on-failure
+        condition: any
         delay: 10s
         max_attempts: 5
         window: 120s
 
   mysqldb:
-    image: 127.0.0.1:5000/ts-app-mysql
+    image: 127.0.0.1:5000/intralaps-mysql
     deploy:
       update_config:
         parallelism: 1

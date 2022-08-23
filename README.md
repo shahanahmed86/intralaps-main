@@ -1,4 +1,4 @@
-# @shahanahmed86/ts-app
+# @shahanahmed86/intralaps-main
 
 ## Prerequisites
 
@@ -26,7 +26,7 @@
 
 ```sh
 # Clone
-git clone git@github.com:shahanahmed86/ts-app.git && cd ts-app-main
+git clone git@github.com:shahanahmed86/intralaps-main.git intralaps-main && cd $_
 
 # to initiate the server run
 node setup
@@ -61,12 +61,12 @@ docker exec -it <container_name> bash
 # copy the DATABASE_URL from your secrets or .env file and
 # paste the url and replace the @<host> with @localhost
 # for example:
-DATABASE_URL="mysql://root:prisma@localhost:3306/mydb" npm run db:deploy
+DATABASE_URL="mysql://root:prisma@localhost:3306/intralaps" npm run db:deploy
 # or replace the run-migration value in the Makefile like above and run
 make run-migration
 
 # to run test cases while development run like:
-DATABASE_URL="mysql://root:prisma@localhost:3306/mydb" npm run --ignore-scripts exec-tests
+DATABASE_URL="mysql://root:prisma@localhost:3306/intralaps" npm run --ignore-scripts exec-tests
 # or replace the run-test value in the Makefile like above and run
 make run-test
 ```

@@ -44,7 +44,7 @@ export const getUserType: GetUserType = (userTypes) => {
 	const { shouldAdmin, shouldUser } = userTypes;
 
 	if ((shouldAdmin && shouldUser) || (!shouldAdmin && !shouldUser)) throw new BadRequest();
-	if (shouldAdmin) return 'adminId';
+	if (shouldAdmin) return 'opsUserId';
 	if (shouldUser) return 'userId';
 
 	throw new BadRequest();

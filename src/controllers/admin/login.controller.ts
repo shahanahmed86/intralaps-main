@@ -11,7 +11,7 @@ type Args = {
 
 type Result = {
 	token: string;
-	payload: Prisma.AdminWhereInput;
+	payload: Prisma.OpsUserWhereInput;
 };
 
 const notAuthenticated: string = 'username or password is incorrect';
@@ -21,13 +21,13 @@ export const login: Controller<null, Args, Result> = async (root, args) => {
 
 	const { username, password } = args;
 
-	const admin = await prisma.admin.findFirst({ where: { username } });
+	const admin = await prisma.opsUser.findFirst({ where: { username } });
 	if (!admin) throw new NotAuthenticated(notAuthenticated);
 
 	const isMatch = compareSync(password, admin.password);
 	if (!isMatch) throw new NotAuthenticated(notAuthenticated);
 
-	const token = encodePayload(admin.id, 'adminId');
+	const token = encodePayload(admin.id, 'opsUserId');
 	const payload = omitProps(admin);
 
 	const result: Result = { token, payload };

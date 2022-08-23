@@ -10,52 +10,47 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Admin {
-  id           String   @id @default(uuid())
+model OpsUser {
+  id           String        @id @default(uuid())
   username     String
   password     String
-  deletedUsers User[]   @relation(name: "Users_Deleted_By_Admin")
-  signUps      SignUp[] @relation(name: "Signups_Deleted_By_Admin")
+  deletedUsers DeletedUser[]
   createdAt    DateTime
   updatedAt    DateTime
 }
 
 model User {
-  id           String    @id @default(uuid())
-  signUps      SignUp[]  @relation(name: "User_to_Signups")
-  defaultLogin LoginType @default(LOCAL)
-  isDeleted    Boolean   @default(false)
-  deletedAt    DateTime?
-  deletedBy    Admin?    @relation(name: "Users_Deleted_By_Admin", fields: [deletedById], references: [id])
-  deletedById  String?
-  createdAt    DateTime
-  updatedAt    DateTime
-}
-
-model SignUp {
-  id          String    @id @default(uuid())
-  type        LoginType @default(LOCAL)
-  username    String?
-  password    String?
-  avatar      String?
-  fullName    String?
-  email       String?
+  id          String       @id @default(uuid())
+  isVerified  Boolean?     @default(false)
+  email       String
+  password    String
+  firstName   String?
+  lastName    String?
+  gender      Gender?      @default(PREFER_NOT_TO_SAY)
+  dateOfBirth DateTime?
+  country     String?
+  state       String?
+  city        String?
+  address     String?
+  zipCode     String?
   cell        String?
-  gender      Gender?
-  user        User      @relation(name: "User_to_Signups", fields: [userId], references: [id])
-  userId      String
-  isDeleted   Boolean   @default(false)
-  deletedAt   DateTime?
-  deletedBy   Admin?    @relation(name: "Signups_Deleted_By_Admin", fields: [deletedById], references: [id])
-  deletedById String?
+  club        String?
+  avatar      String?
+  isActive    Boolean?     @default(true)
+  deletedBy   DeletedUser?
   createdAt   DateTime
   updatedAt   DateTime
 }
 
-enum LoginType {
-  LOCAL
-  FACEBOOK
-  GOOGLE
+model DeletedUser {
+  id          String   @id @default(uuid())
+  deletedAt   DateTime
+  deletedBy   OpsUser  @relation(fields: [deletedById], references: [id])
+  deletedById String
+  user        User     @relation(fields: [userId], references: [id])
+  userId      String   @unique
+  createdAt   DateTime
+  updatedAt   DateTime
 }
 
 enum Gender {

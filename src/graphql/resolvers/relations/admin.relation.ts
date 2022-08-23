@@ -4,20 +4,20 @@ import { NotFound } from '../../../utils/errors.utils';
 import { includeDeleteParams } from '../../../utils/logics.utils';
 
 type Controllers = {
-	signUps: Controller<Prisma.AdminWhereInput, object, Prisma.SignUpWhereInput[]>;
+	deletedUsers: Controller<Prisma.OpsUserWhereInput, object, Prisma.DeletedUserWhereInput[]>;
 };
 
 const Admin: Controllers = {
-	signUps: async (root) => {
+	deletedUsers: async (root) => {
 		try {
 			const id = root.id;
-			if (!id) throw new NotFound('Please provide ID to get signUps');
+			if (!id) throw new NotFound('Please provide ID to get deletedUsers');
 
-			return await prisma.admin
+			return await prisma.opsUser
 				.findFirstOrThrow({ where: { id } })
-				.signUps({ where: includeDeleteParams({}) });
+				.deletedUsers({ where: includeDeleteParams({}) });
 		} catch (error) {
-			console.log('admin.signUps catch error....', error);
+			console.log('admin.deletedUsers catch error....', error);
 			return [];
 		}
 	},

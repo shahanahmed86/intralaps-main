@@ -7,8 +7,8 @@ const router = Router();
 
 router
 	.route('/')
-	.get(auth('adminId'), restWrapper(adminController.loggedIn))
-	.put(auth('adminId'), restWrapper(adminController.changePassword))
+	.get(auth('opsUserId'), restWrapper(adminController.loggedIn))
+	.put(auth('opsUserId'), restWrapper(adminController.changePassword))
 	.post(guest, restWrapper(adminController.login));
 
 export default router;

@@ -64,7 +64,7 @@ describe('Unit testing on logics.utils.ts file', (): void => {
 
 	it('getUserType', (): void => {
 		let result = resolverHelper.resolveGetUserType({ shouldAdmin: true, shouldUser: false });
-		expect(result).to.deep.equal({ success: true, key: 'adminId' });
+		expect(result).to.deep.equal({ success: true, key: 'opsUserId' });
 
 		result = resolverHelper.resolveGetUserType({ shouldAdmin: false, shouldUser: true });
 		expect(result).to.deep.equal({ success: true, key: 'userId' });

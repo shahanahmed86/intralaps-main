@@ -10,7 +10,7 @@ type Args = {
 };
 
 export const changePassword: Controller<null, Args, string> = async (root, args, { req }) => {
-	if (!req.adminId) throw new NotAuthorized();
+	if (!req.opsUserId) throw new NotAuthorized();
 
 	try {
 		await joiValidator(changePasswordSchema, args);
@@ -19,14 +19,14 @@ export const changePassword: Controller<null, Args, string> = async (root, args,
 		throw new ConflictError(error.message);
 	}
 
-	const admin = await prisma.admin.findFirst({ where: { id: req.adminId } });
+	const admin = await prisma.opsUser.findFirst({ where: { id: req.opsUserId } });
 	if (!admin) throw new NotAuthorized();
 
 	const isMatch = compareSync(args.oldPassword, admin.password);
 	if (!isMatch) throw new ConflictError('old password mismatched');
 
 	const password = hashSync(args.password);
-	await prisma.admin.update({ where: { id: admin.id }, data: { password } });
+	await prisma.opsUser.update({ where: { id: admin.id }, data: { password } });
 
 	return 'password changed successfully';
 };

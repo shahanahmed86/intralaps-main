@@ -6,6 +6,6 @@ export interface IRequest extends Request {
 		[key: string]: string;
 	};
 	userId?: string;
-	adminId?: string;
+	opsUserId?: string;
 	error?: HttpError;
 }
