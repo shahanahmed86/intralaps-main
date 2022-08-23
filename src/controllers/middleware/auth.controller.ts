@@ -37,8 +37,8 @@ export const authController = async (key: KeyIds, req: IRequest) => {
 
 	const id = await validateToken(req, token, key);
 	switch (key) {
-		case 'adminId': {
-			const admin = await prisma.admin.findFirst({ where: { id } });
+		case 'opsUserId': {
+			const admin = await prisma.opsUser.findFirst({ where: { id } });
 			if (!admin) throw new NotAuthorized();
 			break;
 		}

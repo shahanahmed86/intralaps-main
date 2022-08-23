@@ -3,7 +3,7 @@ import { JWT_SECRET } from '../config';
 import { KeyIds } from '../types/common.types';
 
 interface IVerifiedUser {
-	adminId?: string;
+	opsUserId?: string;
 	userId?: string;
 	iat: number;
 	exp: number;

@@ -1,7 +1,6 @@
 import admin from './admin.query';
-import user from './user.query';
 import common from './common.query';
 
-const Query = Object.assign({}, admin, user, common);
+const Query = Object.assign({}, admin, common);
 
 export default Query;

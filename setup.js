@@ -65,8 +65,8 @@ const questions = [
 	{
 		type: 'input',
 		name: 'DB_NAME',
-		message: "Please enter the name of Database's host like mydb, test or etc",
-		default: 'mydb',
+		message: "Please enter the name of Database's host like intralaps, test or etc",
+		default: 'intralaps',
 	},
 	{
 		type: 'input',
