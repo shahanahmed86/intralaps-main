@@ -8,7 +8,6 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 const hashSync = (value = '123Abc456') => bcrypt.hashSync(value, +process.env.BCRYPT_SALT);
-const getZeroTimeZone = (value = new Date()) => value.toISOString();
 
 (async () => {
 	try {
@@ -16,11 +15,7 @@ const getZeroTimeZone = (value = new Date()) => value.toISOString();
 
 		let user = await prisma.opsUser.findFirst({ where: { username } });
 		if (!user) {
-			const now = getZeroTimeZone(),
-				password = hashSync('123Abc456'),
-				createdAt = now,
-				updatedAt = now;
-			const data = { username, password, createdAt, updatedAt };
+			const data = { username, password: hashSync('123Abc456') };
 
 			user = await prisma.opsUser.create({ data });
 		}

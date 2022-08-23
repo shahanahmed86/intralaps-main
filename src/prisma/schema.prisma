@@ -11,50 +11,194 @@ datasource db {
 }
 
 model OpsUser {
-  id           String        @id @default(uuid())
-  username     String
-  password     String
-  deletedUsers DeletedUser[]
-  createdAt    DateTime
-  updatedAt    DateTime
+  id                  String         @id @default(uuid())
+  username            String
+  password            String
+  deletedUsers        User[]
+  deletedGroups       Group[]
+  deletedAdminGroups  AdminGroup[]
+  deletedMemberGroup  MemberGroup[]
+  deletedGroupRequest GroupRequest[]
+  deletedEvent        Event[]
+  deletedMemberEvent  MemberEvent[]
+  deletedEventRequest EventRequest[]
+  createdAt           DateTime       @default(now())
+  updatedAt           DateTime       @updatedAt
 }
 
 model User {
-  id          String       @id @default(uuid())
-  isVerified  Boolean?     @default(false)
-  email       String
-  password    String
-  firstName   String?
-  lastName    String?
-  gender      Gender?      @default(PREFER_NOT_TO_SAY)
-  dateOfBirth DateTime?
-  country     String?
-  state       String?
-  city        String?
-  address     String?
-  zipCode     String?
-  cell        String?
-  club        String?
-  avatar      String?
-  isActive    Boolean?     @default(true)
-  deletedBy   DeletedUser?
-  createdAt   DateTime
-  updatedAt   DateTime
-}
-
-model DeletedUser {
-  id          String   @id @default(uuid())
-  deletedAt   DateTime
-  deletedBy   OpsUser  @relation(fields: [deletedById], references: [id])
-  deletedById String
-  user        User     @relation(fields: [userId], references: [id])
-  userId      String   @unique
-  createdAt   DateTime
-  updatedAt   DateTime
+  id                 String         @id @default(uuid())
+  email              String
+  password           String
+  firstName          String?
+  lastName           String?
+  gender             Gender         @default(PREFER_NOT_TO_SAY)
+  dateOfBirth        DateTime?
+  country            String?
+  state              String?
+  city               String?
+  address            String?
+  zipCode            String?
+  cell               String?
+  club               String?
+  avatar             String?
+  isVerified         Boolean        @default(false)
+  isActive           Boolean        @default(true)
+  joinedGroups       MemberGroup[]
+  groupsAdmin        AdminGroup[]
+  memberEvents       MemberEvent[]
+  myRequestsToGroups GroupRequest[] @relation(name: "MembersToGroupRequests")
+  requestsFromGroups GroupRequest[] @relation(name: "AdminsToGroupRequests")
+  myRequestsToEvents EventRequest[]
+  followers          Follow[]       @relation(name: "Followee")
+  followees          Follow[]       @relation(name: "Follower")
+  deletedAt          DateTime?
+  deletedBy          OpsUser?       @relation(fields: [deletedById], references: [id])
+  deletedById        String?
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
 }
 
 enum Gender {
   MALE
   FEMALE
   PREFER_NOT_TO_SAY
+}
+
+model Group {
+  id          String         @id @default(uuid())
+  name        String
+  description String?
+  admins      AdminGroup[]
+  members     MemberGroup[]
+  requests    GroupRequest[]
+  deletedAt   DateTime?
+  deletedBy   OpsUser?       @relation(fields: [deletedById], references: [id])
+  deletedById String?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+}
+
+model AdminGroup {
+  id                 String         @id @default(uuid())
+  role               AdminRole      @default(MANAGER)
+  group              Group          @relation(fields: [groupId], references: [id])
+  groupId            String
+  user               User           @relation(fields: [userId], references: [id])
+  userId             String
+  events             Event[]
+  requestsFromEvents EventRequest[]
+  deletedAt          DateTime?
+  deletedBy          OpsUser?       @relation(fields: [deletedById], references: [id])
+  deletedById        String?
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+}
+
+enum AdminRole {
+  CREATOR
+  MANAGER
+}
+
+model MemberGroup {
+  id          String    @id @default(uuid())
+  group       Group     @relation(fields: [groupId], references: [id])
+  groupId     String
+  user        User      @relation(fields: [userId], references: [id])
+  userId      String
+  deletedAt   DateTime?
+  deletedBy   OpsUser?  @relation(fields: [deletedById], references: [id])
+  deletedById String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model GroupRequest {
+  id          String        @id @default(uuid())
+  status      RequestStatus @default(PENDING)
+  user        User          @relation(name: "MembersToGroupRequests", fields: [userId], references: [id])
+  userId      String
+  admin       User          @relation(name: "AdminsToGroupRequests", fields: [adminId], references: [id])
+  adminId     String
+  group       Group         @relation(fields: [groupId], references: [id])
+  groupId     String
+  deletedAt   DateTime?
+  deletedBy   OpsUser?      @relation(fields: [deletedById], references: [id])
+  deletedById String?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+enum RequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model Event {
+  id          String         @id @default(uuid())
+  name        String
+  description String?
+  isActive    Boolean        @default(true)
+  startsAt    DateTime
+  endsAt      DateTime
+  amount      Int            @default(0)
+  isPublic    Boolean        @default(true)
+  admins      AdminGroup[]
+  members     MemberEvent[]
+  requests    EventRequest[]
+  deletedAt   DateTime?
+  deletedBy   OpsUser?       @relation(fields: [deletedById], references: [id])
+  deletedById String?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+}
+
+model MemberEvent {
+  id          String    @id @default(uuid())
+  event       Event     @relation(fields: [eventId], references: [id])
+  eventId     String
+  user        User      @relation(fields: [userId], references: [id])
+  userId      String
+  deletedAt   DateTime?
+  deletedBy   OpsUser?  @relation(fields: [deletedById], references: [id])
+  deletedById String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model EventRequest {
+  id          String        @id @default(uuid())
+  status      RequestStatus @default(PENDING)
+  user        User          @relation(fields: [userId], references: [id])
+  userId      String
+  admin       AdminGroup    @relation(fields: [adminId], references: [id])
+  adminId     String
+  event       Event         @relation(fields: [eventId], references: [id])
+  eventId     String
+  deletedAt   DateTime?
+  deletedBy   OpsUser?      @relation(fields: [deletedById], references: [id])
+  deletedById String?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+model Follow {
+  id         String   @id @default(uuid())
+  followee   User     @relation(name: "Followee", fields: [followeeId], references: [id])
+  followeeId String
+  follower   User     @relation(name: "Follower", fields: [followerId], references: [id])
+  followerId String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model ContactUs {
+  id        String   @id @default(uuid())
+  name      String
+  email     String
+  subject   String
+  message   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
