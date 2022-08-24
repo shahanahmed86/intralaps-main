@@ -4,7 +4,7 @@ import { NotFound } from '../../../utils/errors.utils';
 import { includeDeleteParams } from '../../../utils/logics.utils';
 
 type Controllers = {
-	deletedUsers: Controller<Prisma.OpsUserWhereInput, object, Prisma.DeletedUserWhereInput[]>;
+	deletedUsers: Controller<Prisma.OpsUserWhereInput, object, Prisma.UserWhereInput[]>;
 };
 
 const Admin: Controllers = {
